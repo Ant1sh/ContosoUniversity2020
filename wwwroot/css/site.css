@@ -1,0 +1,72 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+
+/* CUSTOMIZE THE GENERAL RULES
+-------------------------------------------------- */
+html {
+    font-size: 14px;
+ 
+}
+
+body {
+    font-family: 'Gayathri', sans-serif;
+}
+
+/* CUSTOMIZE THE MAIN CONTAINER
+-------------------------------------------------- */
+main > .container{
+    padding:60px 0 0;/*padding top only*/
+}
+
+/* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+.carousel-caption{
+    background-color:rgba(255,255,255,0.25);
+    color:#000;
+    bottom:30px;
+    padding-bottom:10px;
+}
+
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+.caption-title{
+    background-color:rgba(255,255,255,0.25);
+    position:absolute;
+    bottom:6%;
+    width:100%;
+    height:150px;
+}
+/* CUSTOMIZE THE FOOTER
+-------------------------------------------------- */
+footer {
+    background: #418d41;
+    color: #f8f8f8;
+}
+
+footer a {
+        color: #f8f8f8;
+}
+ul.link-list li a:hover{
+    color:#143d14;
+    font-weight:bold
+}
+
+#sub-footer{
+    background:#222;
+    font-size:12px;
+}
+
+ul.social-network{
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+
+ul social-network li{
+    display:inline;
+    margin:0 5px;
+}
