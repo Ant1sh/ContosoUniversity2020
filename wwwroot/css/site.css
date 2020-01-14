@@ -21,6 +21,9 @@ main > .container{
 
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
+.carousel img{
+    width:100%;
+}
 .carousel-caption{
     background-color:rgba(255,255,255,0.25);
     color:#000;
@@ -40,6 +43,62 @@ main > .container{
     width:100%;
     height:150px;
 }
+
+/* FACULTY SECTION
+-------------------------------------------------- */
+.faculty h2 {
+    background-color: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    padding: 0.25em 0;
+}
+
+.faculty .icons {
+    padding: 33px 0 0 0;
+    width: 100%;
+    height: 160px;
+    color: rgb(255, 255, 255);
+    font-size: 60px;
+    text-align: center;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 0;
+    display: inline-table;
+}
+
+.box-area {
+    border: 1px solid #F3F3F3;
+    padding: 0 15px 12px;
+    padding-top: 41px;
+    margin-top: -42px;
+    text-align: center;
+    background-color: #F9F9F9;
+    position: relative;
+    border-radius: 50%;
+}
+
+
+/* BACKGROUND COLORS
+-------------------------------------------------- */
+.c1 {
+    border: #ed5441 1px solid;
+    background: #ed5441;
+}
+
+.c2 {
+    border: #D867B2 1px solid;
+    background: #D867B2;
+}
+
+.c3 {
+    border: #61B331 1px solid;
+    background: #4BC567;
+}
+
+.c4 {
+    border: #609cec 1px solid;
+    background: #26AFF0;
+}
+
 /* CUSTOMIZE THE FOOTER
 -------------------------------------------------- */
 footer {
@@ -47,26 +106,41 @@ footer {
     color: #f8f8f8;
 }
 
-footer a {
+    footer a {
         color: #f8f8f8;
-}
-ul.link-list li a:hover{
-    color:#143d14;
-    font-weight:bold
+    }
+
+ul.link-list li a:hover {
+    color: #143d14;
+    font-weight: bold
 }
 
-#sub-footer{
-    background:#222;
-    font-size:12px;
+#sub-footer {
+    background: #222;
+    font-size: 12px
 }
 
-ul.social-network{
-    list-style:none;
-    margin:0;
-    padding:0;
+ul.social-network {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-ul social-network li{
-    display:inline;
-    margin:0 5px;
+    ul.social-network li {
+        display: inline;
+        margin: 0 5px;
+    }
+
+/* ============================ MEDIA QUERIES ============================ */
+/*575 pixels or less */
+@media screen and (max-width:575px) {
+    /*Add Margins*/
+    main {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+    /*Hide Carousel*/
+    #myCarousel {
+        display: none;
+    }
 }
