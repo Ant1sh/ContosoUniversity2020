@@ -5,7 +5,7 @@ namespace ContosoUniversity2020.Models
     public class OfficeAssignment
     {
         [Key]
-        public int InstructoiID { get; set; }//PK
+        public int InstructorID { get; set; }//PK
         [Display(Name ="Office Loaction")]
         [StringLength(60)]
         public string Location { get; set; }

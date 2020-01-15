@@ -10,10 +10,10 @@ namespace ContosoUniversity2020.Models
         public int DepartmentID { get; set; }
         [Required]
         [StringLength(60,MinimumLength =3)]
-        public int Name { get; set; }
+        public string Name { get; set; }
         [DataType(DataType.Currency)]//client only
         [Column(TypeName ="money")]//sql server money database
-        public int Buget { get; set; }
+        public decimal Buget { get; set; }
         [DataType(DataType.Date)]
         [Display(Name="Date Created")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}",ApplyFormatInEditMode = true)]

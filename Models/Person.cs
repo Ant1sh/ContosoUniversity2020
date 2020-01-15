@@ -16,31 +16,31 @@ namespace ContosoUniversity2020.Models
         [Required]
         [StringLength(50, ErrorMessage = "First name cannot be longer than 50 characters")]
         [Display(Name = "FirstName")]
-        public int FirstName { get; set; }
+        public string FirstName { get; set; }
         [Required]
         [StringLength(65, ErrorMessage = "Last name cannot be longer than 65 characters")]
         [Display(Name = "LastName")]
-        public int LastName { get; set; }
+        public string LastName { get; set; }
         [Required]
         [DataType(DataType.EmailAddress)] //nvarchar(max)
         [StringLength(85, ErrorMessage = "Email cannot be longer than 85 characters")]
-        public int Email { get; set; }
+        public string Email { get; set; }
         [Required]
         [StringLength(150, ErrorMessage = "Address cannot be longer than 150 characters")]
-        public int Address { get; set; }
+        public string Address { get; set; }
         [Required]
         [StringLength(60)]
-        public int City { get; set; }
+        public string City { get; set; }
         [Required]
         [StringLength(2)]
         [Column(TypeName = "nchar(2)")]
-        public int Province { get; set; }
+        public string Province { get; set; }
         [Required]
         [StringLength(7)]
         [Column(TypeName = "nchar(7)")]
         [DataType(DataType.PostalCode)]
         [Display(Name = "PostalCode")]
-        public int PostalCode { get; set; }
+        public string PostalCode { get; set; }
 
         //some read only properties
 
