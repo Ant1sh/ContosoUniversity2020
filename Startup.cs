@@ -30,6 +30,12 @@ namespace ContosoUniversity2020
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+            //anton: part3 : register the schoolcontext (databasecontext) using Dependency Injection (DI)
+            services.AddDbContext<SchoolContext>(options => // change to schoolcontext
+               options.UseSqlServer(
+                   Configuration.GetConnectionString("DefaultConnection")));
+            //end part3
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
