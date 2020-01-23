@@ -43,7 +43,8 @@ namespace ContosoUniversity2020
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, //part 5 changes
+                                                        SchoolContext context)//changes end
         {
             if (env.IsDevelopment())
             {
@@ -63,6 +64,10 @@ namespace ContosoUniversity2020
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            //part 5 changes
+            DbInitializer.Initialize(context);
+                //changes end
 
             app.UseEndpoints(endpoints =>
             {

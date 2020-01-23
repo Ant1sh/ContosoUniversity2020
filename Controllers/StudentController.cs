@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversity2020.Data;
 using ContosoUniversity2020.Models;
+using ContosoUniversity2020.Models.SchoolViewModels;
+
 
 namespace ContosoUniversity2020.Controllers
 {
@@ -149,5 +151,29 @@ namespace ContosoUniversity2020.Controllers
         {
             return _context.Students.Any(e => e.ID == id);
         }
+
+        //part:7 create view models
+        //2.create the stats ActionResult method
+        public async Task<IActionResult> Stats()
+        {
+            //populate the enrollmentdategroup viewmidel with student statistics
+            //counting number of students by their enrollment date
+            //using LINQ (Language Integrated Query)
+            // select count(*) as StudentCount, EnrollmentDate from person
+            //Where discriminator = 'Student'
+            //Group by EnrollmentDate
+
+            IQueryable<EnrollmentDateGroup> data =
+                from student in _context.Students      //from people where discriminator = 'student'
+                group student by student.EnrollmentDate into dateGroup //group by enrollmentdate
+                select new EnrollmentDateGroup //SELECT EnrollmentDate, COUNT(*) as StudentCount
+                {
+                    EnrollmentDate = dateGroup.Key, //populate property
+                    StudentCount = dateGroup.Count()//populate property
+                };
+
+            //return thr view with populate EnrollmentDateGroup object
+            return View(await data.ToListAsync());
+        }  
     }
 }

@@ -1,77 +1,196 @@
-﻿@model IEnumerable<ContosoUniversity2020.Models.Instructor>
+﻿@* mwilliams:  Part 8:  Creating View Models*@
 
+@model ContosoUniversity2020.Models.SchoolViewModels.InstructorIndexData
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+
+@section CSS{
+    @* DataTables plugin css *@
+    @*<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />*@
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+@section Scripts{
+    @* DataTables plugin javascript *@
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(function () {
+            //Datatables
+            $('#tablesorted').DataTable({
+                "columnDefs": [
+                    { "orderable": false, "targets": -1 },//stop sorting on last column (Edit, Details, Delete)
+                ],
+                //Dropdown (how many entries shown at a time)
+                "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+            });
+
+            //store scroll position and rest after page reload
+            $.fn.scrollPosReload = function () {
+                if (localStorage) {
+                    var posReader = localStorage["posStorage"];
+                    if (posReader) {
+                        $('html, body').animate({ scrollTop: posReader }, 600);//scroll with animation to that window position
+                        localStorage.removeItem("posStorage")//clear localStorage
+                    }
+                    $(this).click(function (e) {
+                        //alert(  $(window).scrollTop()  );
+                        localStorage["posStorage"] = $(window).scrollTop();
+
+                    });
+                    return true;
+
+                }
+                return false;
+            };//end of scrollPosReload
+
+            //Call the function (by using a css class called scroll)
+            $('.scroll').scrollPosReload();
+            //end scrooll position
+        });//end jquery Ready
+    </script>
+}
+
+<h1>Instructors</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-primary" asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.HireDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Province)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PostalCode)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.HireDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Province)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PostalCode)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
+<div class="table-responsive">
+    <table id="tablesorted" class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Hire Date
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Office
+                </th>
+                <th>
+                    Courses
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @*@foreach (var item in Model)*@
+            @foreach (var item in Model.Instructors)
+            {
+                string selectedRow = "";
+                if (item.ID == (int?)ViewData["InstructorID"])
+                {
+                    selectedRow = "table-active";//bootstrap active column class
+                }
+                <tr class="@selectedRow">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HireDate)
+                    </td>
+                    <td>
+                        @Html.DisplayTextFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OfficeAssignment.Location)
+                    </td>
+                    <td>
+                        @* //mwilliams Part 2.  Get the Courses *@
+                        @{
+                            foreach (var course in item.Courses)
+                            {
+                                @course.Course.CourseIdTite<br />
+                            }
+                        }
+                    </td>
+                    <td class="ico text-nowrap">
+                        @* mwilliams:  Part 3.  Get the Department Info *@
+                        <a class="ico-primary scroll" title="Instructor Courses" asp-action="Index" asp-route-id="@item.ID"><i class="fas fa-list"></i></a>
+                        @* end Part 3 *@
+                        <a class="ico-success" title="Edit Instructor" asp-action="Edit" asp-route-id="@item.ID"><i class="fas fa-edit"></i></a>
+                        <a class="ico-info" title="Instructor Details" asp-action="Details" asp-route-id="@item.ID"><i class="fas fa-search-plus"></i></a>
+                        <a class="ico-danger" title="Delete Instructor" asp-action="Delete" asp-route-id="@item.ID"><i class="fas fa-trash-alt"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@* INSTRUCTOR HAS BEEN SELECTED - SHOW THE COURSE ASSIGNMENTS (IF NECESSARY) *@
+@if (Model.Courses != null)//make sure selected instructor has some course assignments
+{
+    if (Model.Courses.Count() == 0)
+    {
+        <h3 class="mt-2">@ViewData["InstructorName"] has not courses assigned yet</h3>
+    }
+    else
+    {
+        <h3 class="mt-2">Courses taught by: @ViewData["InstructorName"]</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="bg-info text-light">
+                    <tr>
+                        <th></th>
+                        <th>Course Number</th>
+                        <th>Title</th>
+                        <th>Department</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Courses)
+                    {
+                        string selectedRow = "";
+                        if (item.CourseID == (int?)ViewData["CourseID"])
+                        {
+                            selectedRow = "table-success";//bootstrap active column class
+                        }
+                        <tr class="@selectedRow">
+                            <td>
+                                <a class="ico-primary scroll" title="View Enrollment" asp-action="Index" asp-route-courseID="@item.CourseID"><i class="fas fa-list"></i></a>
+                            </td>
+                            <td>@item.CourseID</td>
+                            <td>@item.Title</td>
+                            <td>@item.Department.Name</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 }
-    </tbody>
-</table>
+@* COURSE HAS BEEN SELECTED - SHOW THE ENROLLMENT FOR THE SELECTED COURSE (IF NECESSARY)  *@
+@if (Model.Enrollments != null)
+{
+    string CourseTitle = Model.Enrollments.First().Course.Title;
+
+    <h3 class="mt-2">Student Enrolled in: @CourseTitle</h3>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Enrollments)
+                {
+                    <tr>
+                        <td>@item.Student.FullName</td>
+                        @*<td>@item.Grade</td> this will not show 'No Grade Yet when null*@
+                        <td>@Html.DisplayFor(x => item.Grade)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -32,6 +32,7 @@ namespace ContosoUniversity2020.Models
             get
             {
                 return CourseID + ": " + Title;
+                //1021: Intro to c# programming
             }
         }
 

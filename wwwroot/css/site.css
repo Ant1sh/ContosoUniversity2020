@@ -19,6 +19,33 @@ main > .container{
     padding:60px 0 0;/*padding top only*/
 }
 
+/* ICON COLORS
+-------------------------------------------------- */
+.ico a {
+    font-size: 1.2em;
+    padding-right: 0.4em;
+}
+
+.ico-danger {
+    color: #d9534f !important;
+}
+
+.ico-info {
+    color: #5bc0de !important;
+}
+
+.ico-primary {
+    color: #337ab7 !important;
+}
+
+.ico-success {
+    color: #5cb85c !important;
+}
+
+.ico-warning {
+    color: #f0ad4e !important;
+}
+
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
 .carousel img{
@@ -97,6 +124,48 @@ main > .container{
 .c4 {
     border: #609cec 1px solid;
     background: #26AFF0;
+}
+
+/* CUSTOMIZE THE FOOTER
+-------------------------------------------------- */
+#scrolltopbutton {
+    display: inline-block;
+    background-color: #FF9800;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    border-radius: 4px;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    transition: background-color .3s, opacity .5s, visibility .5s;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+}
+
+#scrolltopbutton::after {
+        content: "\f077";
+        font-family: FontAwesome;
+        font-weight: normal;
+        font-style: normal;
+        font-size: 2em;
+        line-height: 50px;
+        color: #fff;
+}
+
+#scrolltopbutton:hover {
+        cursor: pointer;
+        background-color: #333;
+}
+
+#scrolltopbutton:active {
+        background-color: #555;
+}
+
+#scrolltopbutton.show {
+        opacity: 1;
+        visibility: visible;
 }
 
 /* CUSTOMIZE THE FOOTER
