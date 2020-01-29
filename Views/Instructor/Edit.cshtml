@@ -9,50 +9,80 @@
 <h4>Instructor</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="HireDate" class="control-label"></label>
                 <input asp-for="HireDate" class="form-control" />
                 <span asp-validation-for="HireDate" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="ID" />
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="LastName" class="control-label"></label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="Address" class="control-label"></label>
                 <input asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="City" class="control-label"></label>
                 <input asp-for="City" class="form-control" />
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="Province" class="control-label"></label>
                 <input asp-for="Province" class="form-control" />
                 <span asp-validation-for="Province" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="PostalCode" class="control-label"></label>
                 <input asp-for="PostalCode" class="form-control" />
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
+            <div class="form-group col-md-4">
+                <label asp-for="OfficeAssignment.Location" class="control-label"></label>
+                <input asp-for="OfficeAssignment.Location" class="form-control" />
+                <span asp-validation-for="OfficeAssignment.Location" class="text-danger"></span>
+            </div>
+            @* part 9 :showing office location *@
+            <h3 class="mt-2">Course Assignment</h3>
+            <div class="row">
+                @{
+                    //1.Retrieve cource data from viewbag
+                    List<ContosoUniversity2020.Models.SchoolViewModels.AssignedCourseData> courses = ViewBag.Courses;
+                    //2.Loop the list of courses
+                    foreach (var course in courses)
+                    {
+                        <div class="col-md-3">
+                            <div class="form-check form-check-inline">
+                                <input type="checkbox" class="form-check-input"
+                                       name="selectedCourse" id="@course.CourseID"
+                                       value="@course.CourseID"
+                                       @(Html.Raw(course.Assigned ? "checked" : "")) />
+                                <lable class="form-check-label" formaction="@course.CourseID">
+                                    @course.Title
+                                </lable>
+                            </div>
+                        </div>
+                    }
+
+                }
+            </div>
+             @* end of part 9 *@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

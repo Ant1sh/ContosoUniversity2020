@@ -1,27 +1,64 @@
-﻿@* Students Dropdown menu *@
-<li class="nav-item dropdown">
-    <a title="Students" class="nav-link dropdown-toggle text-light" href="#"
-       id="studentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="far fa-address-book"></i> Students
-    </a>
-    <div class="dropdown-menu" aria-labelledby="studentDropdown">
-        <a class="dropdown-item" asp-controller="Student" asp-action="Index"><i class="fas fa-users"></i> Students</a>
-        <a class="dropdown-item" asp-controller="Course" asp-action="Index"><i class="fas fa-book"></i> Courses</a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" asp-controller="Enrollments" asp-action="Index"><i class="fas fa-tasks"></i> Enrollment</a>
-        <a class="dropdown-item" asp-controller="Student" asp-action="Stats"><i class="fas fa-chart-bar"></i> Stats Report</a>
-    </div>
-</li>
+﻿@* Authorization and Authentication menu Part
+    Authenticated : Ii have succesfully logged in (user|PWD)
+    Authrized:What I can see (am I and admin, student or instructor): Roles
+*@
 
-@* Faculty Dropdown menu *@
-<li class="nav-item dropdown">
-    <a title="Faculty" class="nav-link dropdown-toggle text-light" href="#"
-       id="facultyDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="far fa-building"></i> Faculty
-    </a>
-    <div class="dropdown-menu" aria-labelledby="facultyDropdown">
-        <a class="dropdown-item" asp-controller="Instructor" asp-action="Index"><i class="fas fa-chalkboard-teacher"></i> Instructors</a>
-        <a class="dropdown-item" asp-controller="Department" asp-action="Index"><i class="fas fa-sitemap"></i> Departments</a>
+@if (User.Identity.IsAuthenticated)
+{
+    //user is authenticate(eather an Admin,Student or Instructor)
 
-    </div>
-</li>
+
+    if (User.IsInRole("Admin"))
+    {
+        //CONDITION 1:ADMIN
+        //all original code from below belongs here
+        @* Students Dropdown menu *@
+        <li class="nav-item dropdown">
+            <a title="Students" class="nav-link dropdown-toggle text-light" href="#"
+               id="studentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="far fa-address-book"></i> Students
+            </a>
+            <div class="dropdown-menu" aria-labelledby="studentDropdown">
+                <a class="dropdown-item" asp-controller="Student" asp-action="Index"><i class="fas fa-users"></i> Students</a>
+                <a class="dropdown-item" asp-controller="Course" asp-action="Index"><i class="fas fa-book"></i> Courses</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" asp-controller="Enrollments" asp-action="Index"><i class="fas fa-tasks"></i> Enrollment</a>
+                <a class="dropdown-item" asp-controller="Student" asp-action="Stats"><i class="fas fa-chart-bar"></i> Stats Report</a>
+            </div>
+        </li>
+
+        @* Faculty Dropdown menu *@
+        <li class="nav-item dropdown">
+            <a title="Faculty" class="nav-link dropdown-toggle text-light" href="#"
+               id="facultyDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="far fa-building"></i> Faculty
+            </a>
+            <div class="dropdown-menu" aria-labelledby="facultyDropdown">
+                <a class="dropdown-item" asp-controller="Instructor" asp-action="Index"><i class="fas fa-chalkboard-teacher"></i> Instructors</a>
+                <a class="dropdown-item" asp-controller="Department" asp-action="Index"><i class="fas fa-sitemap"></i> Departments</a>
+
+            </div>
+        </li>
+    }
+    else if (User.IsInRole("Student"))
+    {
+        //CONDITION 2:STUDENT
+        <li class="nav-item">
+            <a class="nav-link text-light" asp-area="" asp-controller="StudentEnrollment" asp-action="Index"><i class="fas fa-list-ol"></i>Your Courses</a>
+        </li>
+    }
+    else if (User.IsInRole("Instructor"))
+    {
+        //CONDITION 3:INSTRUCTOR
+        <li class="nav-item">
+            <a class="nav-link text-light" asp-area="" asp-controller="InstructorCourse" asp-action="Index"><i class="fas fa-list-ol"></i>Your Courses</a>
+        </li>
+    }
+}
+else
+{
+    //user is not authendicated (guest)
+    <li class="nav-item">
+        <a class="nav-link text-light" asp-area="" asp-controller="Course" asp-action="Listing"><i class="fas fa-list-ol"></i>Our Courses</a>
+    </li>
+}

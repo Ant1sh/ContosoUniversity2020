@@ -8,10 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using ContosoUniversity2020.Data;
 using ContosoUniversity2020.Models;
 using ContosoUniversity2020.Models.SchoolViewModels;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace ContosoUniversity2020.Controllers
 {
+    //mwilliams:  Part 12:  Authorization (securing admin controllers)
+    [Authorize(Roles = "Admin")]
     public class StudentController : Controller
     {
         private readonly SchoolContext _context;
@@ -152,28 +154,34 @@ namespace ContosoUniversity2020.Controllers
             return _context.Students.Any(e => e.ID == id);
         }
 
-        //part:7 create view models
-        //2.create the stats ActionResult method
+        //mwilliams:  Part 7:  Creating View Models
+        //2.  Create the Stats ActionResult method 
+
+        // GET: Student/Stats
         public async Task<IActionResult> Stats()
         {
-            //populate the enrollmentdategroup viewmidel with student statistics
-            //counting number of students by their enrollment date
+            //Populate the EnrollmentDateGroup ViewModel with Student Statistics
+            //Counting the number of students by their enrollment date
             //using LINQ (Language Integrated Query)
-            // select count(*) as StudentCount, EnrollmentDate from person
-            //Where discriminator = 'Student'
-            //Group by EnrollmentDate
-
+            /*  This is the SQL version
+                SELECT EnrollmentDate, COUNT(*) as StudentCount FROM person
+                WHERE discriminator = 'Student'
+                GROUP BY EnrollmentDate
+             *
+             */
+            //now using LINQ
             IQueryable<EnrollmentDateGroup> data =
-                from student in _context.Students      //from people where discriminator = 'student'
-                group student by student.EnrollmentDate into dateGroup //group by enrollmentdate
+                from s in _context.Students //FROM People  WHERE discriminator = 'Student' 
+                group s by s.EnrollmentDate into dateGroup //GROUP BY EnrollmentDate
                 select new EnrollmentDateGroup //SELECT EnrollmentDate, COUNT(*) as StudentCount
                 {
                     EnrollmentDate = dateGroup.Key, //populate property
                     StudentCount = dateGroup.Count()//populate property
                 };
 
-            //return thr view with populate EnrollmentDateGroup object
+            //return the view with populate EnrollmentDateGroup object
             return View(await data.ToListAsync());
-        }  
+
+        }
     }
 }

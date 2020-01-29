@@ -7,7 +7,7 @@
 <h1>Department</h1>
 
 <p>
-    <<a class="btn btn-primary" asp-action="Create"><i class="fas fa-plus"></i>Create New</a>
+    <a class="btn btn-primary" asp-action="Create"><i class="fas fa-plus"></i>Create New</a>
 </p>
 <div class="table-responcive">
     <table class="table table-bordered">
@@ -42,7 +42,7 @@
                         @Html.DisplayFor(modelItem => item.CreateDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Administrator.Address)
+                        @Html.DisplayFor(modelItem => item.Administrator.FullName)
                     </td>
                     <td class="iso text-nowrap">
                         <a class="ico-success" asp-action="Edit" asp-route-id="@item.DepartmentID"><i class="fas fa-edit"></i></a> |

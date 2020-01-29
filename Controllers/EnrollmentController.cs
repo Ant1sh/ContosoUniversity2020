@@ -7,26 +7,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversity2020.Data;
 using ContosoUniversity2020.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ContosoUniversity2020.Controllers
 {
-    public class EnrollmentsController : Controller
+    //mwilliams:  Part 12:  Authorization (securing admin controllers)
+    [Authorize(Roles = "Admin")]
+    public class EnrollmentController : Controller
     {
         private readonly SchoolContext _context;
 
-        public EnrollmentsController(SchoolContext context)
+        public EnrollmentController(SchoolContext context)
         {
             _context = context;
         }
 
-        // GET: Enrollments
+        // GET: Enrollment
         public async Task<IActionResult> Index()
         {
             var schoolContext = _context.Enrollments.Include(e => e.Course).Include(e => e.Student);
             return View(await schoolContext.ToListAsync());
         }
 
-        // GET: Enrollments/Details/5
+        // GET: Enrollment/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,7 +49,7 @@ namespace ContosoUniversity2020.Controllers
             return View(enrollment);
         }
 
-        // GET: Enrollments/Create
+        // GET: Enrollment/Create
         public IActionResult Create()
         {
             ViewData["CourseID"] = new SelectList(_context.Courses, "CourseID", "Title");
@@ -54,7 +57,7 @@ namespace ContosoUniversity2020.Controllers
             return View();
         }
 
-        // POST: Enrollments/Create
+        // POST: Enrollment/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -72,7 +75,7 @@ namespace ContosoUniversity2020.Controllers
             return View(enrollment);
         }
 
-        // GET: Enrollments/Edit/5
+        // GET: Enrollment/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,7 +93,7 @@ namespace ContosoUniversity2020.Controllers
             return View(enrollment);
         }
 
-        // POST: Enrollments/Edit/5
+        // POST: Enrollment/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -127,7 +130,7 @@ namespace ContosoUniversity2020.Controllers
             return View(enrollment);
         }
 
-        // GET: Enrollments/Delete/5
+        // GET: Enrollment/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -147,7 +150,7 @@ namespace ContosoUniversity2020.Controllers
             return View(enrollment);
         }
 
-        // POST: Enrollments/Delete/5
+        // POST: Enrollment/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

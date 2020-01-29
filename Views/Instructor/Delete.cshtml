@@ -10,6 +10,9 @@
 <div>
     <h4>Instructor</h4>
     <hr />
+    @*mwilliams: Added Error handling on delete*@
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @*  end *@
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.HireDate)

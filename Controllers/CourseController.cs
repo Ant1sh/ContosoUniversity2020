@@ -7,9 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversity2020.Data;
 using ContosoUniversity2020.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ContosoUniversity2020.Controllers
 {
+    //mwilliams:  Part 12:  Authorization (securing admin controllers)
+    [Authorize(Roles ="Admin")]
+
+    //mwilliams:  Part 4: Scaffold Models and Customize Views
     public class CourseController : Controller
     {
         private readonly SchoolContext _context;
@@ -27,6 +32,7 @@ namespace ContosoUniversity2020.Controllers
         }
 
         // GET: Course/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -48,7 +54,7 @@ namespace ContosoUniversity2020.Controllers
         // GET: Course/Create
         public IActionResult Create()
         {
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID");
+            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "Name");
             return View();
         }
 
@@ -65,7 +71,7 @@ namespace ContosoUniversity2020.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", course.DepartmentID);
+            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "Name", course.DepartmentID);
             return View(course);
         }
 
@@ -82,7 +88,7 @@ namespace ContosoUniversity2020.Controllers
             {
                 return NotFound();
             }
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", course.DepartmentID);
+            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "Name", course.DepartmentID);
             return View(course);
         }
 
@@ -118,7 +124,7 @@ namespace ContosoUniversity2020.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", course.DepartmentID);
+            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "Name", course.DepartmentID);
             return View(course);
         }
 
@@ -156,5 +162,44 @@ namespace ContosoUniversity2020.Controllers
         {
             return _context.Courses.Any(e => e.CourseID == id);
         }
-    }
-}
+
+        //mwilliams:  Custom Listing method for guest users 
+        // (non-registered|not logged in users)
+        [AllowAnonymous]
+        public async Task<IActionResult> Listing(int? selectedDepartment)
+        {
+            //the selectedDepartment above refers to a dropdownlist (select) in the corresponding
+            //View
+            IQueryable<Course> courses = GetCourses(selectedDepartment);
+            return View(await courses.ToListAsync());
+        }
+
+        private IQueryable<Course> GetCourses(int? selectedDepartment)
+        {
+            //Get all departments sorted by name
+            var departments = _context.Departments.OrderBy(d => d.Name).ToList();
+
+            //Add ViewData object to populate a dropdownlist called selectedDepartment
+            ViewData["selectedDepartment"] =
+                new SelectList(departments, "DepartmentID", "Name", selectedDepartment);
+            //<select name="selectedDepartment">
+            //  <option value="1" selected>Accounting</option>
+            //</select>
+
+            //retrieve the incoming id parameter value
+            int departmentId = selectedDepartment.GetValueOrDefault();
+
+            //get courses only for a single selected department
+            IQueryable<Course> courses = _context.Courses
+                .Where(c => !selectedDepartment.HasValue ||
+                            c.DepartmentID == departmentId)
+                .OrderBy(d => d.CourseID)
+                .Include(d => d.Department);
+
+            return courses;
+        }//end of GetCourses
+
+
+
+    }//End Class
+}//End Namespace
