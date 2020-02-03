@@ -1,0 +1,54 @@
+﻿@model ContosoUniversity2020.Models.Enrollment
+@{ 
+    ViewData["Title"] = "UnEnroll";
+}
+
+<h2>UnEnroll</h2>
+@* Check for any model errors ; like student trying to UnEnroll when a grade is recorded *@
+@if (!ViewData.ModelState.IsValid)
+{
+    //there was a model erroe - display it
+    <div class="alert alert-danger" role="alert">
+        @Html.ValidationMessage("Has GRade");
+    </div>
+}
+else
+{
+//good to go - show enrollment details (for enrollment student wishesw to remove 
+<div>
+    <h3>Are you sure you want to remove this class</h3>
+    <p class="text-danger">@ViewData["ErrorMessage"]</p>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Grade)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Grade)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Student)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Student.FullName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Course)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.Title)
+        </dd>
+    </dl>
+
+    <form asp-action="UnEnroll">
+        <input type="hidden" asp-for="EnrollmentID"/>
+        <input type="submit" value="UnEnroll" class="btn btn-danger"/>
+    </form>
+</div>
+}
+
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.EnrollmentID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -2,47 +2,90 @@
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h2>@ViewData["StudentName"]</h2>
+<h3></h3>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Grade)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Student)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Course)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Grade)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Student.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Course.Title)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EnrollmentID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EnrollmentID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EnrollmentID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Course.CourseID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Course.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Grade)
+                </th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Course.CourseID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Course.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Grade)
+                        @if(item.Grade==null)//show Unenroll button
+                        {
+                            <a class="ico-danger" title="UnEnroll from @item.CourseID"
+                             asp-action="UnEnroll" asp-route-id="@item.EnrollmentID">
+                             <i class="fas fa-trash-alt"></i>
+                            </a>
+
+                        }
+                    </td>
+               
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@* Show avaliable courses: Courses that student is not currently enrolled in yet*@
+<div class=" my-4">
+    <h2>Avaliable Courses:</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Course Number</th>
+                    <th>Title</th>
+                    <th>Credits</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ 
+                    List<Course> courses = ViewBag.Courses;
+                    foreach(var item in courses)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(m => item.CourseID)</td>
+                            <td>@Html.DisplayFor(m => item.Title)</td>
+                            <td>@Html.DisplayFor(m => item.Credits)</td>
+                            <td class="iso">
+                                <a asp-action="Enroll" asp-route-id="@item.CourseID"
+                                 class="ico-success" title="Enroll in @item.CourseID">
+                                 <i class="fas fa-plus-circle"></i>
+                                </a>
+                            </td>
+                            
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

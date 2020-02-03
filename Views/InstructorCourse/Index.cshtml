@@ -1,0 +1,135 @@
+﻿@model IEnumerable<ContosoUniversity2020.Models.SchoolViewModels.InstructorCourseData>
+
+@{
+    ViewData["Title"] = "Instructor Courses";
+
+    int numItems = Model.Count();
+    var print = "";
+    if (numItems > 0)
+    {
+        print = numItems > 1 ? "s" : "";
+    }
+
+}
+<h1>Course Assignment@(print) for @ViewData["InstructorName"]</h1>
+<div class="alert alert-primary" role="alert">
+    You are currently assigned the following @numItems Course@(print)
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.CourseID)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th class="text-nowrap">View Class</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        string selectedRow = "";
+                        if (item.CourseID == (int?)ViewData["CourseID"])
+                        {
+                            selectedRow = "table-active";//bootstrap active column class
+                        }
+                        <tr class="@selectedRow">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CourseID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td class="ico">
+                                <a class="ico-primary" title="@item.Title class roster" asp-route-id="@item.CourseID">
+                                    <i class="fas fa-user-friends"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-6">
+        @* Get the selected course (to view student enrollment) *@
+        @{
+            List<Enrollment> enrolled = ViewBag.Enrolled;
+            if (enrolled != null)
+            {
+                if (enrolled.Count() > 0)
+                {
+                    //we have student enrollment in this course - show it
+
+                    @*<div class="row">
+                    <div class="col-5">*@
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">@ViewData["Course"]</div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Grade</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in enrolled)
+                                    {
+                                        <tr>
+                                            <td>@item.Student.FullName</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Grade)</td>
+                                            <td>
+                                                @if (String.IsNullOrEmpty(item.Grade.ToString()))
+                                                {
+                                                    <a style="padding:.75em" class="badge badge-pill badge-success"
+                                                       title="Add Grade" asp-action="Edit" asp-route-mode="Add"
+                                                       asp-route-id="@item.EnrollmentID">
+                                                        <i class="fas fa-plus-square"></i> Add Grade
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a style="padding:.75em" class="badge badge-pill badge-warning"
+                                                       title="Edit Grade" asp-action="Edit" asp-route-mode="Edit"
+                                                       asp-route-id="@item.EnrollmentID">
+                                                        <i class="fas fa-edit"></i> Edit Grade
+                                                    </a>
+                                                }
+
+
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    @*</div>
+                    </div>*@
+                }
+                else
+                {
+                    <div class="alert alert-info" role="alert">
+                        No enrollment for @ViewData["Course"] yet!
+                    </div>
+                }
+
+
+            }
+        }
+    </div>
+</div>
+
+
+
+
+
